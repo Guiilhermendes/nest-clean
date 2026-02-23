@@ -3,6 +3,7 @@ import { StudentsRepository } from "../repositories/students-repository"
 import { Student } from "../../enterprise/entities/student"
 import { HashGenerator } from "../cryptography/hash-generator"
 import { StudentAlreadyExistsError } from "./errors/student-already-exists-error"
+import { Injectable } from "@nestjs/common"
 
 interface RegisterStudentUseCaseRequest {
     name: string
@@ -17,6 +18,7 @@ type RegisterStudentUseCaseResponse = Either<
     }
 >
 
+@Injectable()
 export class RegisterStudentUseCase {
     constructor(
         private studentsRepository: StudentsRepository,
