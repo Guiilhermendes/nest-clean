@@ -3,7 +3,7 @@ import { BadRequestException, Controller, Get, Param } from "@nestjs/common";
 import { QuestionPresenter } from "../presenters/question-presenter";
 
 @Controller('/questions/:slug')
-export class GetQuestionBySlug {
+export class GetQuestionBySlugController {
     constructor(private getQuestionBySlug: GetQuestionBySlugUseCase) {}
 
     @Get()

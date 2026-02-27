@@ -6,7 +6,7 @@ import { PrismaService } from "../prisma.service";
 import { PrismaAnswerMapper } from "../mappers/prisma-answer-mapper";
 
 @Injectable()
-export class PrismaAnswersRespository implements AnswersRepository {
+export class PrismaAnswersRepository implements AnswersRepository {
     constructor(private prisma: PrismaService) {}
 
     async findById(id: string): Promise<Answer | null> {
