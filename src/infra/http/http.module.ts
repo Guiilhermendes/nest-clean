@@ -13,6 +13,20 @@ import { GetQuestionBySlugController } from "./controllers/get-question-by-slug.
 import { GetQuestionBySlugUseCase } from "@/domain/forum/application/use-cases/get-question-by-slug";
 import { EditQuestionController } from "./controllers/edit-question.controller";
 import { EditQuestionUseCase } from "@/domain/forum/application/use-cases/edit-question";
+import { DeleteQuestionUseCase } from "@/domain/forum/application/use-cases/delete-question";
+import { DeleteQuestionController } from "./controllers/delete-question.controller";
+import { AnswerQuestionController } from "./controllers/answer-question.controller";
+import { AnswerQuestionUseCase } from "@/domain/forum/application/use-cases/answer-question";
+import { EditAnswerController } from "./controllers/edit-answer.controller";
+import { EditAnswerUseCase } from "@/domain/forum/application/use-cases/edit-answer";
+import { DeleteAnswerController } from "./controllers/delete-answer.controller";
+import { DeleteAnswerUseCase } from "@/domain/forum/application/use-cases/delete-answer";
+import { FetchQuestionAnswersController } from "./controllers/fetch-question-answers.controller";
+import { FetchQuestionAnswersUseCase } from "@/domain/forum/application/use-cases/fetch-question-answers";
+import { ChooseQuestionBestAnswerController } from "./controllers/choose-question-best-answer.controller";
+import { ChooseQuestionBestAnswerUseCase } from "@/domain/forum/application/use-cases/choose-question-best-answer";
+import { CommentOnQuestionController } from "./controllers/comment-on-question.controller";
+import { CommentOnQuestionUseCase } from "@/domain/forum/application/use-cases/comment-on-question";
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -22,7 +36,14 @@ import { EditQuestionUseCase } from "@/domain/forum/application/use-cases/edit-q
     CreateQuestionController,
     FetchRecentQuestionsController,
     GetQuestionBySlugController,
-    EditQuestionController
+    EditQuestionController,
+    DeleteQuestionController,
+    AnswerQuestionController,
+    EditAnswerController,
+    DeleteAnswerController,
+    FetchQuestionAnswersController,
+    ChooseQuestionBestAnswerController,
+    CommentOnQuestionController
   ],
   providers: [
     CreateQuestionUseCase,
@@ -30,7 +51,14 @@ import { EditQuestionUseCase } from "@/domain/forum/application/use-cases/edit-q
     RegisterStudentUseCase,
     AuthenticateStudentUseCase,
     GetQuestionBySlugUseCase,
-    EditQuestionUseCase
+    EditQuestionUseCase,
+    DeleteQuestionUseCase,
+    AnswerQuestionUseCase,
+    EditAnswerUseCase,
+    DeleteAnswerUseCase,
+    FetchQuestionAnswersUseCase,
+    ChooseQuestionBestAnswerUseCase,
+    CommentOnQuestionUseCase
   ],
 })
 export class HttpModule {}

@@ -37,7 +37,7 @@ describe('Edit question (E2E)', () => {
         const userId = user.id.toString();
         const accessToken = jwt.sign({ sub: userId });
 
-        const question = await questionFactory.makePrismaStudent({
+        const question = await questionFactory.makePrismaQuestion({
             authorId: user.id
         })
 

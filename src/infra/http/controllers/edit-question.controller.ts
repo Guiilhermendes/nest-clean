@@ -3,11 +3,14 @@ import { CurrentUser } from "@/infra/Auth/current-user-decorator";
 import type { UserPayload } from "@/infra/Auth/jwt.strategy";
 import { BadRequestException, Body, Controller, HttpCode, Param, Put } from "@nestjs/common";
 import z from "zod";
+import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 
 const editQuestionBodySchema = z.object({
     title: z.string(),
     content: z.string()
 });
+
+const bodyValidationPipe = new ZodValidationPipe(editQuestionBodySchema);
 
 type EditQuestionBodySchema = z.infer<typeof editQuestionBodySchema>
 
@@ -18,7 +21,7 @@ export class EditQuestionController {
     @Put()
     @HttpCode(204)
     async handle(
-        @Body() body: EditQuestionBodySchema,
+        @Body(bodyValidationPipe) body: EditQuestionBodySchema,
         @CurrentUser() user: UserPayload,
         @Param('id') questionId: string
     ) {
