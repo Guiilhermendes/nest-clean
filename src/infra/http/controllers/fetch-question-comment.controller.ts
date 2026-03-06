@@ -1,17 +1,17 @@
 import { BadRequestException, Controller, Get, HttpCode, Param, Query } from "@nestjs/common";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import z from "zod";
-import { FetchQuestionAnswersUseCase } from "@/domain/forum/application/use-cases/fetch-question-answers";
-import { AnswerPresenter } from "../presenters/answer-presenter";
+import { FetchQuestionCommentsUseCase } from "@/domain/forum/application/use-cases/fetch-question-comments";
+import { CommentPresenter } from "../presenters/comment-presenter";
 
 const pageQueryParamSchema = z.coerce.number().min(1).optional().default(1);
 const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema);
 
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
 
-@Controller('/questions/:questionId/answers')
-export class FetchQuestionAnswersController {
-    constructor(private fetchQuestionAnswers: FetchQuestionAnswersUseCase) {}
+@Controller('/questions/:questionId/comments')
+export class FetchQuestionCommentsController {
+    constructor(private fetchQuestionComments: FetchQuestionCommentsUseCase) {}
 
     @Get()
     @HttpCode(200)
@@ -19,10 +19,10 @@ export class FetchQuestionAnswersController {
         @Query('page', queryValidationPipe) page: PageQueryParamSchema,
         @Param('questionId') questionId: string
     ) {
-        const result = await this.fetchQuestionAnswers.execute({ page, questionId });
+        const result = await this.fetchQuestionComments.execute({ page, questionId });
         if (result.isLeft()) throw new BadRequestException();
 
-        const { answers } = result.value;
-        return { answers: answers.map(AnswerPresenter.toHttp) }
+        const { questionComments } = result.value;
+        return { comments: questionComments.map(CommentPresenter.toHttp) }
     }
 }
