@@ -1,12 +1,9 @@
 import { INestApplication } from "@nestjs/common";
-import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { Test } from "@nestjs/testing";
 import { AppModule } from "@/infra/app.module";
 import request from "supertest";
 import { StudentFactory } from "test/factories/make-students";
-import { QuestionFactory } from "test/factories/make-question";
 import { JwtService } from "@nestjs/jwt";
-import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug";
 import { DatabaseModule } from "@/infra/database/database.module";
 
 describe('Upload attachment (E2E)', () => {
@@ -18,7 +15,8 @@ describe('Upload attachment (E2E)', () => {
         const moduleRef = await Test.createTestingModule({
             imports: [AppModule, DatabaseModule],
             providers: [StudentFactory]
-        }).compile();
+        })
+        .compile();
 
         app = moduleRef.createNestApplication();
         studentFactory = moduleRef.get(StudentFactory);
@@ -38,5 +36,8 @@ describe('Upload attachment (E2E)', () => {
             .attach('file', './test/e2e/sample-upload.png');
 
         expect(response.statusCode).toEqual(201);
+        expect(response.body).toEqual({
+            attachmentId: expect.any(String)
+        })
     });
 })
