@@ -5,6 +5,8 @@ import request from "supertest";
 import { StudentFactory } from "test/factories/make-students";
 import { JwtService } from "@nestjs/jwt";
 import { DatabaseModule } from "@/infra/database/database.module";
+import { Uploader } from "@/domain/forum/application/storage/uploader";
+import { FakeUploader } from "test/storage/fake-uploader";
 
 describe('Upload attachment (E2E)', () => {
     let app: INestApplication;
@@ -16,6 +18,8 @@ describe('Upload attachment (E2E)', () => {
             imports: [AppModule, DatabaseModule],
             providers: [StudentFactory]
         })
+        .overrideProvider(Uploader)
+        .useClass(FakeUploader)
         .compile();
 
         app = moduleRef.createNestApplication();
