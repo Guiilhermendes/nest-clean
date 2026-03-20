@@ -5,23 +5,26 @@ import { INestApplication } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
+import { AttachmentFactory } from "test/factories/make-attachment";
 import { StudentFactory } from "test/factories/make-students";
 
 describe('Create question (E2E)', () => {
     let app: INestApplication;
     let prisma: PrismaService;
     let studentFactory: StudentFactory;
+    let attachmentFactory: AttachmentFactory;
     let jwt: JwtService;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [AppModule, DatabaseModule],
-            providers: [StudentFactory]
+            providers: [StudentFactory, AttachmentFactory]
         }).compile();
 
         app = moduleRef.createNestApplication();
         prisma = moduleRef.get(PrismaService);
         studentFactory = moduleRef.get(StudentFactory);
+        attachmentFactory = moduleRef.get(AttachmentFactory)
         jwt = moduleRef.get(JwtService);
 
         await app.init();
@@ -34,12 +37,16 @@ describe('Create question (E2E)', () => {
         const userId = user.id.toString();
         const accessToken = jwt.sign({ sub: userId });
 
+        const attachment1 = await attachmentFactory.makePrismaAttachment();
+        const attachment2 = await attachmentFactory.makePrismaAttachment();
+
         const response = await request(app.getHttpServer())
             .post('/questions')
             .set('Authorization', (`Bearer ${accessToken}`))
             .send({
                 title,
-                content: 'Question content'
+                content: 'Question content',
+                attachments: [attachment1.id.toString(), attachment2.id.toString()]
             });
 
         expect(response.statusCode).toEqual(201)
@@ -51,5 +58,13 @@ describe('Create question (E2E)', () => {
         });
 
         expect(questionOnDatabase).toBeTruthy();
+
+        const attachmentsOnDataBase = await prisma.attachment.findMany({
+            where: {
+                questionId: questionOnDatabase?.id
+            }
+        });
+
+        expect(attachmentsOnDataBase).toHaveLength(2);
     });
 });
