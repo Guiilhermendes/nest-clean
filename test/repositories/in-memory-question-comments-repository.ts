@@ -39,7 +39,7 @@ export class InMemoryQuestionCommentsRepository
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt,
         authorId: comment.authorId,
-        author: this.studentsRepository.items.find(user => user.id.equals(comment.authorId))?.name || ""
+        author: this.studentsRepository.items.find(user => user.id.equals(comment.authorId))?.name ?? ""
       }));
 
     return questionComments

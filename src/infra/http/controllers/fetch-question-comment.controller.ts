@@ -2,7 +2,7 @@ import { BadRequestException, Controller, Get, HttpCode, Param, Query } from "@n
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import z from "zod";
 import { FetchQuestionCommentsUseCase } from "@/domain/forum/application/use-cases/fetch-question-comments";
-import { CommentPresenter } from "../presenters/comment-presenter";
+import { CommentWithAuthorPresenter } from "../presenters/comment-with-author-presenter";
 
 const pageQueryParamSchema = z.coerce.number().min(1).optional().default(1);
 const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema);
@@ -22,7 +22,7 @@ export class FetchQuestionCommentsController {
         const result = await this.fetchQuestionComments.execute({ page, questionId });
         if (result.isLeft()) throw new BadRequestException();
 
-        const { questionComments } = result.value;
-        return { comments: questionComments.map(CommentPresenter.toHttp) }
+        const { comments } = result.value;
+        return { comments: comments.map(CommentWithAuthorPresenter.toHttp) }
     }
 }
