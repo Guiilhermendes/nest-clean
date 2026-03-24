@@ -8,10 +8,12 @@ export abstract class AnswerCommentsRepository {
     answerId: string,
     params: PaginationParams,
   ): Promise<AnswerComment[]>
+
   abstract findManyByAnswerIdWithAuthor(
     answerId: string,
     params: PaginationParams,
   ): Promise<CommentWithAuthor[]>
+
   abstract create(answerComment: AnswerComment): Promise<void>
   abstract delete(answerComment: AnswerComment): Promise<void>
 }

@@ -1,40 +1,47 @@
-import { BadRequestException, Body, Controller, HttpCode, Param, Post } from "@nestjs/common";
-import { CurrentUser } from "@/infra/Auth/current-user-decorator";
-import type { UserPayload } from "@/infra/Auth/jwt.strategy";
-import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
-import z from "zod";
-import { AnswerQuestionUseCase } from "@/domain/forum/application/use-cases/answer-question";
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  HttpCode,
+  Param,
+  Post,
+} from '@nestjs/common'
+import { CurrentUser } from '@/infra/Auth/current-user-decorator'
+import type { UserPayload } from '@/infra/Auth/jwt.strategy'
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
+import z from 'zod'
+import { AnswerQuestionUseCase } from '@/domain/forum/application/use-cases/answer-question'
 
 const answerQuestionBodySchema = z.object({
-    content: z.string(),
-    attachments: z.array(z.uuid())
-});
+  content: z.string(),
+  attachments: z.array(z.uuid()),
+})
 
-const bodyValidationPipe = new ZodValidationPipe(answerQuestionBodySchema);
+const bodyValidationPipe = new ZodValidationPipe(answerQuestionBodySchema)
 
 type AnswerQuestionBodySchema = z.infer<typeof answerQuestionBodySchema>
 
 @Controller('/questions/:questionId/answers')
 export class AnswerQuestionController {
-    constructor(private answerQuestionUseCase: AnswerQuestionUseCase) {}
+  constructor(private answerQuestionUseCase: AnswerQuestionUseCase) {}
 
-    @Post()
-    @HttpCode(201)
-    async handle(
-        @Body(bodyValidationPipe) body: AnswerQuestionBodySchema,
-        @CurrentUser() user: UserPayload,
-        @Param('questionId') questionId: string
-    ) {
-        const { content, attachments } = body;
-        const { sub: userId } = user;
+  @Post()
+  @HttpCode(201)
+  async handle(
+    @Body(bodyValidationPipe) body: AnswerQuestionBodySchema,
+    @CurrentUser() user: UserPayload,
+    @Param('questionId') questionId: string,
+  ) {
+    const { content, attachments } = body
+    const { sub: userId } = user
 
-        const result = await this.answerQuestionUseCase.execute({
-            authorId: userId,
-            questionId,
-            content,
-            attachmentsIds: attachments
-        });
+    const result = await this.answerQuestionUseCase.execute({
+      authorId: userId,
+      questionId,
+      content,
+      attachmentsIds: attachments,
+    })
 
-        if (result.isLeft()) throw new BadRequestException();
-    }
+    if (result.isLeft()) throw new BadRequestException()
+  }
 }

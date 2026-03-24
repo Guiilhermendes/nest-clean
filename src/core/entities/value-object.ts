@@ -11,7 +11,7 @@ export abstract class ValueObject<Props> {
     }
 
     if (vo.props === undefined) {
-        return false
+      return false
     }
 
     return JSON.stringify(vo.props) === JSON.stringify(this.props)

@@ -86,7 +86,7 @@ describe('Edit Answer', () => {
 
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(NotAllowedError)
-  });
+  })
 
   it('should sync new and removed attachments when editing an answer', async () => {
     const newAnswer = makeAnswer(
@@ -117,16 +117,16 @@ describe('Edit Answer', () => {
     })
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryAnswerAttachmentsRepository.items).toHaveLength(2);
-        expect(inMemoryAnswerAttachmentsRepository.items).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              attachmentId: new UniqueEntityID('1')
-            }),
-            expect.objectContaining({
-              attachmentId: new UniqueEntityID('3')
-            })
-          ])
-        );
+    expect(inMemoryAnswerAttachmentsRepository.items).toHaveLength(2)
+    expect(inMemoryAnswerAttachmentsRepository.items).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('1'),
+        }),
+        expect.objectContaining({
+          attachmentId: new UniqueEntityID('3'),
+        }),
+      ]),
+    )
   })
 })

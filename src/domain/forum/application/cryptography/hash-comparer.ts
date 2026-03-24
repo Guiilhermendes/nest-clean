@@ -1,3 +1,3 @@
 export abstract class HashComparer {
-    abstract compare(plan: string, hash: string): Promise<boolean>
+  abstract compare(plan: string, hash: string): Promise<boolean>
 }

@@ -10,28 +10,30 @@ import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memo
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-respository'
 import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 
-let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
-let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
-let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
-let inMemoryAnswersRepository: InMemoryAnswersRepository;
-let sut: ChooseQuestionBestAnswerUseCase;
-let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
-let inMemoryStudentsRepository: InMemoryStudentsRepository;
+let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
+let inMemoryQuestionsRepository: InMemoryQuestionsRepository
+let inMemoryAnswersRepository: InMemoryAnswersRepository
+let sut: ChooseQuestionBestAnswerUseCase
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 
 describe('Choose Question Best Answer', () => {
   beforeEach(() => {
-    inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository();
-    inMemoryQuestionAttachmentsRepository = new InMemoryQuestionAttachmentsRepository();
-    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
-    inMemoryStudentsRepository = new InMemoryStudentsRepository();
+    inMemoryAnswerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+    inMemoryQuestionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository()
+    inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
       inMemoryQuestionAttachmentsRepository,
       inMemoryAttachmentsRepository,
-      inMemoryStudentsRepository
-    );
+      inMemoryStudentsRepository,
+    )
     inMemoryAnswersRepository = new InMemoryAnswersRepository(
       inMemoryAnswerAttachmentsRepository,
-    );
+    )
 
     sut = new ChooseQuestionBestAnswerUseCase(
       inMemoryQuestionsRepository,

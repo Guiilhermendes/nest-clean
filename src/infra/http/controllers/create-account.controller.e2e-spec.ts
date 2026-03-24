@@ -1,41 +1,41 @@
-import { AppModule } from "@/infra/app.module";
-import { PrismaService } from "@/infra/database/prisma/prisma.service";
-import { INestApplication } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
-import request from "supertest";
+import { AppModule } from '@/infra/app.module'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
+import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+import request from 'supertest'
 
 describe('Create account (E2E)', () => {
-    let app: INestApplication;
-    let prisma: PrismaService
+  let app: INestApplication
+  let prisma: PrismaService
 
-    beforeAll(async () => {
-        const moduleRef = await Test.createTestingModule({
-            imports: [AppModule]
-        }).compile();
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile()
 
-        app = moduleRef.createNestApplication();
-        prisma = moduleRef.get(PrismaService);
+    app = moduleRef.createNestApplication()
+    prisma = moduleRef.get(PrismaService)
 
-        await app.init();
+    await app.init()
+  })
+
+  test('[POST] /accounts', async () => {
+    const email = 'johndoe@example.com'
+
+    const response = await request(app.getHttpServer()).post('/accounts').send({
+      name: 'John Doe',
+      email,
+      password: '123456',
     })
 
-    test('[POST] /accounts', async () => {
-        const email = 'johndoe@example.com';
+    expect(response.statusCode).toEqual(201)
 
-        const response = await request(app.getHttpServer()).post('/accounts').send({
-            name: 'John Doe',
-            email,
-            password: '123456'
-        });
-
-        expect(response.statusCode).toEqual(201);
-
-        const userOnDatabase = prisma.user.findUnique({
-            where: {
-                email
-            }
-        });
-
-        expect(userOnDatabase).toBeTruthy();
+    const userOnDatabase = prisma.user.findUnique({
+      where: {
+        email,
+      },
     })
-});
+
+    expect(userOnDatabase).toBeTruthy()
+  })
+})

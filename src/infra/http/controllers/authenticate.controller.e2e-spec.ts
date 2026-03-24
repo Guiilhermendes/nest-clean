@@ -1,44 +1,44 @@
-import { AppModule } from "@/infra/app.module";
-import { DatabaseModule } from "@/infra/database/database.module";
-import { INestApplication } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
-import { hash } from "bcryptjs";
-import request from "supertest";
-import { StudentFactory } from "test/factories/make-students";
+import { AppModule } from '@/infra/app.module'
+import { DatabaseModule } from '@/infra/database/database.module'
+import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+import { hash } from 'bcryptjs'
+import request from 'supertest'
+import { StudentFactory } from 'test/factories/make-students'
 
 describe('Authenticate (E2E)', () => {
-    let app: INestApplication;
-    let studentFactory: StudentFactory;
+  let app: INestApplication
+  let studentFactory: StudentFactory
 
-    beforeAll(async () => {
-        const moduleRef = await Test.createTestingModule({
-            imports: [AppModule, DatabaseModule],
-            providers: [StudentFactory]
-        }).compile();
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule, DatabaseModule],
+      providers: [StudentFactory],
+    }).compile()
 
-        app = moduleRef.createNestApplication();
-        studentFactory = moduleRef.get(StudentFactory);
+    app = moduleRef.createNestApplication()
+    studentFactory = moduleRef.get(StudentFactory)
 
-        await app.init()
-    });
+    await app.init()
+  })
 
-    test('[POST] /sessions', async () => {
-        const email = 'johndoe@example.com';
-        const password = '123456';
+  test('[POST] /sessions', async () => {
+    const email = 'johndoe@example.com'
+    const password = '123456'
 
-        await studentFactory.makePrismaStudent({
-            email,
-            password: await hash(password, 8)
-        })
+    await studentFactory.makePrismaStudent({
+      email,
+      password: await hash(password, 8),
+    })
 
-        const response = await request(app.getHttpServer()).post('/sessions').send({
-            email,
-            password: '123456'
-        });
+    const response = await request(app.getHttpServer()).post('/sessions').send({
+      email,
+      password: '123456',
+    })
 
-        expect(response.statusCode).toEqual(201);
-        expect(response.body).toEqual({
-            access_token: expect.any(String)
-        })
-    });
-});
+    expect(response.statusCode).toEqual(201)
+    expect(response.body).toEqual({
+      access_token: expect.any(String),
+    })
+  })
+})

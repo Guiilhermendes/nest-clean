@@ -22,9 +22,8 @@ export class DeleteQuestionCommentUseCase {
     authorId,
     questionCommentId,
   }: DeleteQuestionCommentUseCaseRequest): Promise<DeleteQuestionCommentUseCaseResponse> {
-    const questionComment = await this.questionCommentsRepository.findById(
-      questionCommentId,
-    )
+    const questionComment =
+      await this.questionCommentsRepository.findById(questionCommentId)
 
     if (!questionComment) {
       return left(new ResourceNotFoundError())

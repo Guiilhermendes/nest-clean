@@ -8,12 +8,12 @@ import { EnvModule } from './env/env.module'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      validate: env => envSchema.parse(env),
-      isGlobal: true
+      validate: (env) => envSchema.parse(env),
+      isGlobal: true,
     }),
     AuthModule,
     HttpModule,
-    EnvModule
-  ]
+    EnvModule,
+  ],
 })
 export class AppModule {}
