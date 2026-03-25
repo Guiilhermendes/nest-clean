@@ -1,5 +1,4 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
 import { Notification } from '@/domain/notification/enterprise/entities/notification'
 import { Prisma, Notification as PrismaNotification } from '@prisma/client'
 
@@ -11,13 +10,15 @@ export class PrismaNotificationMapper {
         content: raw.content,
         recipientId: new UniqueEntityID(raw.recipientId),
         readAt: raw.readAt,
-        createdAt: raw.createdAt
+        createdAt: raw.createdAt,
       },
       new UniqueEntityID(raw.id),
     )
   }
 
-  static toPrisma(notification: Notification): Prisma.NotificationUncheckedCreateInput {
+  static toPrisma(
+    notification: Notification,
+  ): Prisma.NotificationUncheckedCreateInput {
     return {
       id: notification.id.toString(),
       recipientId: notification.recipientId.toString(),

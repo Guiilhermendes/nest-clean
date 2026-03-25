@@ -15,7 +15,7 @@ import { EventsModule } from './events/events.module'
     AuthModule,
     HttpModule,
     EnvModule,
-    EventsModule
+    EventsModule,
   ],
 })
 export class AppModule {}
