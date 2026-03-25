@@ -65,7 +65,7 @@ import { ReadNotificationUseCase } from '@/domain/notification/application/use-c
     FetchQuestionCommentsController,
     FetchAnswerCommentsController,
     UploadAttachmentController,
-    ReadNotificationController
+    ReadNotificationController,
   ],
   providers: [
     CreateQuestionUseCase,
@@ -87,7 +87,7 @@ import { ReadNotificationUseCase } from '@/domain/notification/application/use-c
     FetchQuestionCommentsUseCase,
     FetchAnswerCommentsUseCase,
     UploadAndCreateAttachmentUseCase,
-    ReadNotificationUseCase
+    ReadNotificationUseCase,
   ],
 })
 export class HttpModule {}

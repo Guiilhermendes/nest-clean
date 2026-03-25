@@ -3,18 +3,27 @@ import { PrismaClient } from '@prisma/client'
 import { config } from 'dotenv'
 import { execSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
+import { Redis } from 'ioredis'
+import { envSchema } from '@/infra/env/env'
 
 config({ path: '.env', override: true })
 config({ path: '.env.test', override: true })
 
+const env = envSchema.parse(process.env)
+
 const prisma = new PrismaClient()
+const redis = new Redis({
+  host: env.REDIS_HOST,
+  port: env.REDIS_PORT,
+  db: env.REDIS_DB,
+})
 
 function generateUniqueDatabaseURL(schemaId: string) {
-  if (!process.env.DATABASE_URL) {
+  if (!env.DATABASE_URL) {
     throw new Error('Please provider a DATABASE_URL environment variable.')
   }
 
-  const url = new URL(process.env.DATABASE_URL)
+  const url = new URL(env.DATABASE_URL)
 
   url.searchParams.set('schema', schemaId)
 
@@ -23,11 +32,13 @@ function generateUniqueDatabaseURL(schemaId: string) {
 
 const schemaId = randomUUID()
 
-beforeAll(() => {
+beforeAll(async () => {
   const databaseUrl = generateUniqueDatabaseURL(schemaId)
   process.env.DATABASE_URL = databaseUrl
 
   DomainEvents.shouldRun = false
+
+  await redis.flushdb()
 
   execSync('npx prisma migrate deploy')
 })

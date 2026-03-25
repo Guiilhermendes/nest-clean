@@ -7,6 +7,9 @@ export const envSchema = z.object({
   SUPABASE_URL: z.string(),
   SUPABASE_BUCKET: z.string(),
   SUPABASE_KEY: z.string(),
+  REDIS_HOST: z.string().optional().default('127.0.0.1'),
+  REDIS_PORT: z.coerce.number().optional().default(6379),
+  REDIS_DB: z.coerce.number().optional().default(0),
   PORT: z.coerce.number().optional().default(3333),
 })
 

@@ -18,10 +18,7 @@ describe('Read notification (E2E)', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [
-        StudentFactory,
-        NotificationFactory
-      ],
+      providers: [StudentFactory, NotificationFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
@@ -39,7 +36,7 @@ describe('Read notification (E2E)', () => {
     const accessToken = jwt.sign({ sub: recipientId })
 
     const notification = await notificationFactory.makePrismaNotification({
-        recipientId: user.id
+      recipientId: user.id,
     })
 
     const response = await request(app.getHttpServer())
@@ -48,11 +45,11 @@ describe('Read notification (E2E)', () => {
       .send()
 
     expect(response.statusCode).toEqual(204)
-    
+
     const notificationOnDatabase = await prisma.notification.findFirst({
-        where: {
-            recipientId
-        }
+      where: {
+        recipientId,
+      },
     })
 
     expect(notificationOnDatabase?.readAt).not.toBeNull()

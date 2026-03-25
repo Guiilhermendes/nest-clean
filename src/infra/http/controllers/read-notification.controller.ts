@@ -1,5 +1,10 @@
-import { BadRequestException, Controller, HttpCode, Param, Patch } from '@nestjs/common'
-import { QuestionDetailsPresenter } from '../presenters/question-details-presenter'
+import {
+  BadRequestException,
+  Controller,
+  HttpCode,
+  Param,
+  Patch,
+} from '@nestjs/common'
 import { ReadNotificationUseCase } from '@/domain/notification/application/use-cases/read-notification'
 import { CurrentUser } from '@/infra/Auth/current-user-decorator'
 import type { UserPayload } from '@/infra/Auth/jwt.strategy'
@@ -12,9 +17,12 @@ export class ReadNotificationController {
   @HttpCode(204)
   async handle(
     @Param('notificationId') notificationId: string,
-    @CurrentUser() user: UserPayload
+    @CurrentUser() user: UserPayload,
   ) {
-    const result = await this.readNotification.execute({ notificationId, recipientId: user.sub })
+    const result = await this.readNotification.execute({
+      notificationId,
+      recipientId: user.sub,
+    })
     if (result.isLeft()) throw new BadRequestException()
   }
 }

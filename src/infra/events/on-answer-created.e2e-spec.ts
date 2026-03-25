@@ -28,7 +28,7 @@ describe('On answer created (E2E)', () => {
     studentFactory = moduleRef.get(StudentFactory)
     jwt = moduleRef.get(JwtService)
     questionFactory = moduleRef.get(QuestionFactory)
-    
+
     DomainEvents.shouldRun = true
 
     await app.init()
